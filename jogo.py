@@ -30,25 +30,21 @@ def move_star(star):
 
 class Sprite(object):
     """Define a game sprite"""
-
     def __init__(self, image, pos, **kwargs):
         """Initialize a sprite object"""
         self.pos = pos
         self.image = pygame.image.load(image)
         self.speed = kwargs.get('speed', 1)
         self.movement = (0, 0)
-
     def draw(self, screen, **kwargs):
         """Draw the sprite to the screen"""
         screen.blit(self.image, self.pos)
-
     def update(self):
         """Update sprite position"""
         x, y = self.pos
         dx, dy = self.movement
         speed = self.speed
         self.pos = (x + dx*speed, y + dy*speed)
-
     def limits(sled, window):
         """Ensure sprite in within limits"""
         w, h = window
@@ -70,10 +66,7 @@ clock = pygame.time.Clock()
 
 protagonista = Sprite('media/images/f18.png', (50, HEIGHT//2), speed=3)
 
-starfield = [create_star(randrange(0, WIDTH-1), randrange(0, HEIGHT-1))
-             for _ in range(300)]
-#starfield = [create_star(randrange(0, WIDTH - 1), randrange(0, HEIGTH - 1)
-#                         for _ in range(300)]
+starfield = [create_star(randrange(0, WIDTH-1), randrange(0, HEIGHT-1)) for _ in range(300)]
 
 while running:
     # Trata eventos
@@ -87,18 +80,21 @@ while running:
                 print("Voce apertou ESC! Fraco!")
                 running = False
                 break
+            
     # Se o jogo ainda continua...
     if running:
         #desenha objetos
         screen.fill((0, 0, 0)) 
         for star in starfield:
             draw_star(screen, star)
+        protagonista.draw(screen)
         pygame.display.flip()
-        # manipula objetos
+        # atualiza objetos
         starfield = [move_star(star)
                  if star[0] > 0
                  else create_star(WIDTH-1, randrange(0, HEIGHT - 1))
                  for star in starfield]
+        protagonista.update()
         clock.tick(FPS)
 
 # finalizear o sistema
