@@ -10,9 +10,6 @@ from random import choice, randrange
 import sys
 import pygame
 
-
-
-
 def create_star(x, y):
 	speed = randrange(1, 3)
 	size = randrange(1, 3)
@@ -60,6 +57,7 @@ class Sprite(object):
         x = 0 if x < 0 else w - a if x > w - a else x
         y = 0 if y < 0 else h - b if y > h - b else y
 
+# inicializacao
 pygame.init()
 
 SIZE = WIDTH, HEIGHT = (640, 480)
@@ -68,7 +66,7 @@ FPS = 60
 fullscreen = pygame.FULLSCREEN if ("-fs" is sys.argv) else 0
 screen = pygame.display.set_mode(SIZE, fullscreen)
 running = True
-
+clock = pygame.time.Clock()
 
 protagonista = Sprite('media/images/f18.png', (50, HEIGHT//2), speed=3)
 
@@ -81,28 +79,34 @@ while running:
     # Trata eventos
     for event in pygame.event.get():
         if event.type == pygame.QUIT: # Evento de "fechar aplicacao"
+            print("QUIT!")
             running = False
             break
         elif event.type in [pygame.KEYUP, pygame.KEYDOWN]:  # Evento de teclado
             if event.key == pygame.K_ESCAPE:
+                print("Voce apertou ESC! Fraco!")
                 running = False
                 break
     # Se o jogo ainda continua...
     if running:
         #desenha objetos
+        screen.fill((0, 0, 0)) 
         for star in starfield:
             draw_star(screen, star)
         pygame.display.flip()
         # manipula objetos
+        starfield = [move_star(star)
+                 if star[0] > 0
+                 else create_star(WIDTH-1, randrange(0, HEIGHT - 1))
+                 for star in starfield]
+        clock.tick(FPS)
+
 # finalizear o sistema
 print("Nao desista! Volte logo!")
 
 #
 #
-#starfield = [move_star(star)
-#                 if star[0] > 0
-#                 else create_star(WIDTH-1, randrange(0, WEIGTH - 1))
-#                 for star in starfield]
+
 
 
 
