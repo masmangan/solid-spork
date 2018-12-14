@@ -1,5 +1,34 @@
 import java.awt.*;
+import java.util.*;
+import java.util.stream.*;
+import java.util.function.*;
 
+class Star {
+	public int x;
+	public int y;
+	public int size;
+	public int color;
+
+	public Star() {
+		Random r = new Random();
+		this.x = r.nextInt(100);
+		this.y = r.nextInt(100);
+		this.size = r.nextInt(3) + 1; 
+		this.color = r.nextInt(3);
+	}
+	
+
+}
+
+class Starfield {
+
+	public Stream<Star> stars;
+
+	public Starfield() {
+		stars = Stream.generate(()-> new Star())
+			.limit(10);
+	}
+}
 
 public class Jogo extends Panel {
 
@@ -18,8 +47,10 @@ Frame f = new Frame(gc);
 	f.setVisible(true);
 	Thread.sleep(100);
 }
+	public Starfield field = new Starfield();
+
 	public void paint(Graphics g) {
 		Graphics2D g2 = (Graphics2D)g;
-		g2.fillRect(10, 10, 2, 2);
-}
+		field.stars.forEach(s -> g2.fillRect(s.x, s.y, s.size, s.size));
+	}
 }
