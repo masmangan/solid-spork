@@ -11,32 +11,20 @@ class Star {
 
 	public Star() {
 		Random r = new Random();
-		this.x = r.nextInt(100);
-		this.y = r.nextInt(100);
-		this.size = r.nextInt(3) + 1; 
-		this.color = r.nextInt(3);
-	}
-	
-
-}
-
-class Starfield {
-
-	public Stream<Star> stars;
-
-	public Starfield() {
-		stars = Stream.generate(()-> new Star())
-			.limit(10);
+		x = r.nextInt(800);
+		y = r.nextInt(600);
+		size = r.nextInt(3) + 1; 
+		color = r.nextInt(3);
 	}
 }
 
 public class Jogo extends Panel {
 
-public static void main(String args[]) throws Exception {
-GraphicsEnvironment ge = GraphicsEnvironment.
-   getLocalGraphicsEnvironment();
-GraphicsDevice[] gs = ge.getScreenDevices();
-GraphicsConfiguration gc = gs[0].getDefaultConfiguration();
+	public static void main(String args[]) throws Exception {
+		GraphicsEnvironment ge = GraphicsEnvironment.
+		getLocalGraphicsEnvironment();
+		GraphicsDevice[] gs = ge.getScreenDevices();
+		GraphicsConfiguration gc = gs[0].getDefaultConfiguration();
 
 Frame f = new Frame(gc);
       Rectangle bounds = gc.getBounds();
@@ -47,10 +35,12 @@ Frame f = new Frame(gc);
 	f.setVisible(true);
 	Thread.sleep(100);
 }
-	public Starfield field = new Starfield();
+	public Stream<Star> field = 
+		Stream.generate(()-> new Star())
+			.limit(300);
 
 	public void paint(Graphics g) {
 		Graphics2D g2 = (Graphics2D)g;
-		field.stars.forEach(s -> g2.fillRect(s.x, s.y, s.size, s.size));
+		field.forEach(s -> g2.fillRect(s.x, s.y, s.size, s.size));
 	}
 }
