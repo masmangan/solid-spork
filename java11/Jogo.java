@@ -40,7 +40,6 @@ public class Jogo extends Panel {
 	}
 	public static void main(String args[]) throws Exception {
 		Frame f = new Frame();
-		Jogo jogo = new Jogo();
       		f.setLocation(10, 10);
 		f.setTitle("Oh, hello!");
 		f.setSize(800,600);
