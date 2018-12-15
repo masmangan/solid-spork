@@ -5,37 +5,41 @@ import java.util.function.*;
 import javax.swing.Timer;
 
 class Star {
+	static Random r = new Random();
 	int x;
 	int y;
 	int size;
 	int speed;
+	Color color;
 
 	Star() {
-		Random r = new Random();
-		recycle(r.nextInt(800));
+		setAt(r.nextInt(800));
 	}
-	void recycle(int x) {
-		Random r = new Random();
+	void setAt(int x) {
 		this.x = x;
 		y = r.nextInt(600);
 		size = r.nextInt(3) + 1; 
 		speed = r.nextInt(3) + 1; 
+		color = Color.black;
+		if (r.nextInt(100) > 30) color = Color.gray;
+		if (r.nextInt(100) > 30) color = Color.lightGray;
 	}
 	void move() {
-		if (x <= 0) recycle(800);
+		if (x <= 0) setAt(800);
 		x-= speed;
 	}
 }
 
 public class Jogo extends Panel {
-
+	public static final long serialVersionUID = 0;
 	final java.util.List<Star> field;
+	
 	Jogo() {
 		field = Stream.generate(()-> new Star())
 			.limit(300)
 			.collect(Collectors.toList());
 
-		Timer t = new Timer(100, e -> {field.forEach(s -> s.move());repaint();});
+		Timer t = new Timer(100, e -> {field.forEach(s -> s.move()); repaint();});
 		t.start();
 	}
 	public static void main(String args[]) throws Exception {
@@ -48,6 +52,7 @@ public class Jogo extends Panel {
 	}
 	public void paint(final Graphics g) {
 		Graphics2D g2 = (Graphics2D)g;
-		field.forEach(s -> g2.fillRect(s.x, s.y, s.size, s.size));
+		
+		field.forEach(s -> { g2.setColor(s.color); g2.fillRect(s.x, s.y, s.size, s.size); } );
 	}
 }
