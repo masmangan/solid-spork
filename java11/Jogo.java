@@ -30,6 +30,24 @@ class Star {
 	}
 }
 
+class Sprite {
+	int x;
+	int y;
+	int speed;
+	int dx;
+	int dy;
+	Image image;
+	
+	Sprite(String file, int x, int y, int speed) {
+		this.x = x;
+		this.y = y;
+		this.speed = speed;
+		dx = 0;
+		dy = 0;
+	}
+
+}
+
 public class Jogo extends Panel {
 	public static final long serialVersionUID = 0;
 	final java.util.List<Star> field;
