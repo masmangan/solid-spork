@@ -12,20 +12,17 @@ class Star {
 
 	Star() {
 		Random r = new Random();
-		x = r.nextInt(800);
-		y = r.nextInt(600);
-		size = r.nextInt(3) + 1; 
-		speed = r.nextInt(3) + 1; 
+		recycle(r.nextInt(800));
 	}
-	void recycle() {
+	void recycle(int x) {
 		Random r = new Random();
-		x = 800;
+		this.x = x;
 		y = r.nextInt(600);
 		size = r.nextInt(3) + 1; 
 		speed = r.nextInt(3) + 1; 
 	}
 	void move() {
-		if (x <= 0) recycle();
+		if (x <= 0) recycle(800);
 		x-= speed;
 	}
 }
