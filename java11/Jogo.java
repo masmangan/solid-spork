@@ -2,44 +2,55 @@ import java.awt.*;
 import java.util.*;
 import java.util.stream.*;
 import java.util.function.*;
+import javax.swing.Timer;
 
 class Star {
-	public int x;
-	public int y;
-	public int size;
-	public int color;
+	int x;
+	int y;
+	int size;
+	int speed;
 
-	public Star() {
+	Star() {
 		Random r = new Random();
 		x = r.nextInt(800);
 		y = r.nextInt(600);
 		size = r.nextInt(3) + 1; 
-		color = r.nextInt(3);
+		speed = r.nextInt(3) + 1; 
+	}
+	void recycle() {
+		Random r = new Random();
+		x = 800;
+		y = r.nextInt(600);
+		size = r.nextInt(3) + 1; 
+		speed = r.nextInt(3) + 1; 
+	}
+	void move() {
+		if (x <= 0) recycle();
+		x-= speed;
 	}
 }
 
 public class Jogo extends Panel {
 
+	final java.util.List<Star> field;
+	Jogo() {
+		field = Stream.generate(()-> new Star())
+			.limit(300)
+			.collect(Collectors.toList());
+
+		Timer t = new Timer(100, e -> {field.forEach(s -> s.move());repaint();});
+		t.start();
+	}
 	public static void main(String args[]) throws Exception {
-		GraphicsEnvironment ge = GraphicsEnvironment.
-		getLocalGraphicsEnvironment();
-		GraphicsDevice[] gs = ge.getScreenDevices();
-		GraphicsConfiguration gc = gs[0].getDefaultConfiguration();
-
-Frame f = new Frame(gc);
-      Rectangle bounds = gc.getBounds();
-      f.setLocation(10 + bounds.x, 10 + bounds.y);
-	f.setTitle("Oh, hello!");
-	f.setSize(800,600);
-	f.add(new Jogo());
-	f.setVisible(true);
-	Thread.sleep(100);
-}
-	public Stream<Star> field = 
-		Stream.generate(()-> new Star())
-			.limit(300);
-
-	public void paint(Graphics g) {
+		Frame f = new Frame();
+		Jogo jogo = new Jogo();
+      		f.setLocation(10, 10);
+		f.setTitle("Oh, hello!");
+		f.setSize(800,600);
+		f.add(new Jogo());
+		f.setVisible(true);
+	}
+	public void paint(final Graphics g) {
 		Graphics2D g2 = (Graphics2D)g;
 		field.forEach(s -> g2.fillRect(s.x, s.y, s.size, s.size));
 	}
