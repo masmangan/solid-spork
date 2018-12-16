@@ -3,6 +3,10 @@ import java.util.*;
 import java.util.stream.*;
 import java.util.function.*;
 import javax.swing.Timer;
+import static java.lang.System.*;
+import java.io.*;
+import javax.imageio.*;
+import java.awt.image.*;
 
 class Star {
 	static Random r = new Random();
@@ -36,7 +40,7 @@ class Sprite {
 	int speed;
 	int dx;
 	int dy;
-	Image image;
+	BufferedImage image;
 	
 	Sprite(String file, int x, int y, int speed) {
 		this.x = x;
@@ -44,24 +48,31 @@ class Sprite {
 		this.speed = speed;
 		dx = 0;
 		dy = 0;
+		try {
+    			image = ImageIO.read(new File(file));
+		} catch (IOException e) {
+			out.println("No image here!");
+		}	
 	}
-
 }
 
 public class Jogo extends Panel {
 	public static final long serialVersionUID = 0;
 	final java.util.List<Star> field;
+	Sprite hero;
 	
 	Jogo() {
 		field = Stream.generate(()-> new Star())
 			.limit(300)
 			.collect(Collectors.toList());
 
-		Timer t = new Timer(100, e -> {field.forEach(s -> s.move()); repaint();});
+		var t = new Timer(100, e -> {field.forEach(s -> s.move()); repaint();});
 		t.start();
+
+		hero = new Sprite("../media/images/f18.png", 30, 30, 0);
 	}
 	public static void main(String args[]) throws Exception {
-		Frame f = new Frame();
+		var f = new Frame();
       		f.setLocation(10, 10);
 		f.setTitle("Oh, hello!");
 		f.setSize(800,600);
@@ -69,8 +80,8 @@ public class Jogo extends Panel {
 		f.setVisible(true);
 	}
 	public void paint(final Graphics g) {
-		Graphics2D g2 = (Graphics2D)g;
+		var g2 = (Graphics2D)g;
 		
-		field.forEach(s -> { g2.setColor(s.color); g2.fillRect(s.x, s.y, s.size, s.size); } );
+		field.forEach(s -> { g2.setColor(s.color); g2.fillRect(s.x, s.y, s.size, s.size); g2.drawImage(hero.image, hero.y, hero.y, null);} );
 	}
 }
